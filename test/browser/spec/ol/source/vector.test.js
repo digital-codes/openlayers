@@ -824,6 +824,30 @@ describe('ol/source/Vector', function () {
         );
       });
 
+      it('removes infinite extent from loadedExtentsRtree after multiple load requests', function (done) {
+        const source = new VectorSource();
+        source.setLoader(async () => []);
+
+        // Make multiple load requests with different extents
+        source.loadFeatures([-10, -10, 10, 10], 1, getProjection('EPSG:3857'));
+        source.loadFeatures([0, 0, 10, 10], 1, getProjection('EPSG:3857'));
+        source.loadFeatures([10, 10, 20, 20], 1, getProjection('EPSG:3857'));
+
+        // Wait for all loader callbacks to complete
+        setTimeout(() => {
+          // Verify we have loaded extents in the tree
+          const initialExtents = source.loadedExtentsRtree_.getAll();
+          expect(initialExtents.length).to.be.greaterThan(0);
+
+          // Remove the infinite extent
+          source.removeLoadedExtent([-Infinity, -Infinity, Infinity, Infinity]);
+
+          // Verify the tree is empty after removal
+          expect(source.loadedExtentsRtree_.getAll()).to.have.length(0);
+          done();
+        }, 0);
+      });
+
       it('fires the FEATURESLOADEND event if the load function uses the callback', function (done) {
         const source = new VectorSource();
         const spy = sinonSpy();
