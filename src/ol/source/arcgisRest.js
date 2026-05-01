@@ -67,7 +67,7 @@ export function getRequestUrl(
  * @property {Object<string,*>} [params] ArcGIS Rest parameters. This field is optional. Service
  * defaults will be used for any fields not specified. `format` is `png32` by default. `f` is
  * `image` by default. `transparent` is `true` by default.  `bbox`, `size`, `bboxSR`, and `imageSR`
- * will be set dynamically. Set `LAYERS` to override the default service layer visibility. See
+ * will be set dynamically. Set `layers` to override the default service layer visibility. See
  * https://developers.arcgis.com/rest/services-reference/export-map.htm
  * for further reference.
  * @property {import("../proj.js").ProjectionLike} [projection] Projection. Default is 'EPSG:3857'.
