@@ -11,6 +11,7 @@ import {
   getMapTileUrlTemplate,
   getTileSetInfo,
   getVectorTileUrlTemplate,
+  parseTileMatrixSet,
 } from '../../../../src/ol/source/ogcTileUtil.js';
 import TileGrid from '../../../../src/ol/tilegrid/TileGrid.js';
 import expect from '../../expect.js';
@@ -404,6 +405,24 @@ describe('ol/source/ogcTileUtil.js', () => {
       expect(appendedUrl).to.be(
         '/ogcapi/tiles/WebMercatorQuad.json?collections=foo%2Cbar,baz',
       );
+    });
+  });
+
+  describe('parseTileMatrixSet()', () => {
+    it('handles minZoom correctly', async () => {
+      const tileSet = await fse.readJSON(
+        path.join(getDataDir(), 'ogcapi/tiles/WebMercatorQuad.json'),
+      );
+      const tileMatrixSet = await fse.readJSON(
+        path.join(getDataDir(), 'ogcapi/tileMatrixSets/WebMercatorQuad.json'),
+      );
+      const tileInfo = parseTileMatrixSet(
+        {},
+        tileMatrixSet,
+        undefined,
+        tileSet.tileMatrixSetLimits,
+      );
+      expect(tileInfo.grid.getMinZoom()).to.be(6);
     });
   });
 });
