@@ -379,6 +379,16 @@ describe('ol/tilegrid/TileGrid.js', function () {
     });
   });
 
+  it('calculates implicit minZoom from resolutions', function () {
+    resolutions.unshift(undefined, undefined);
+    const tileGrid = new TileGrid({
+      resolutions,
+      origin,
+      tileSize,
+    });
+    expect(tileGrid.getMinZoom()).to.be(2);
+  });
+
   describe('createForExtent', function () {
     it('allows creation of tile grid from extent', function () {
       const extent = createOrUpdate(-100, -100, 100, 100);
